@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// ベースクラス
 /// </summary>
-public class Base : Interface
+public class Base
 {
     /// <summary>
     /// 配列
@@ -44,9 +42,5 @@ public class Base : Interface
     public virtual void Play(int[] values)
     {
         Array = values;
-    }
-
-    public virtual void Sort()
-    {
     }
 }

@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using System.Threading.Tasks;
 
 /// <summary>
 /// バブルソート
 /// </summary>
-public class BubbleSort : Base
+public class BubbleSort : Base, Interface
 {
     /// <summary>
     /// コンストラクタ
@@ -31,7 +28,7 @@ public class BubbleSort : Base
     /// <summary>
     /// ソート
     /// </summary>
-    public override async void Sort()
+    public async void Sort()
     {
         for (int i = 0; i < Global.Length - 1; i++)
             for (int j = Global.Length - 1; j >= i + 1; j--)
