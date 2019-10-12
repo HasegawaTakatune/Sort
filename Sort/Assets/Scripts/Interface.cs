@@ -15,35 +15,16 @@ public struct ChangedData
     public float fromValue;
     public int toIndex;
     public float toValue;
+    public int count;
 
-    public ChangedData(int fromIndex, int fromValue, int toIndex, int toValue) : this()
+    public ChangedData(int fromIndex, int fromValue, int toIndex, int toValue, int count) : this()
     {
         this.fromIndex = fromIndex;
         this.fromValue = fromValue;
         this.toIndex = toIndex;
         this.toValue = toValue;
+        this.count = count;
     }
-}
-
-/// <summary>
-/// UIアイテムの列挙
-/// </summary>
-public enum UI_BUTTON
-{
-    /// <summary>
-    /// 実行
-    /// </summary>
-    Play = 0,
-
-    /// <summary>
-    /// バブルソート
-    /// </summary>
-    BubbleSort,
-
-    /// <summary>
-    /// 長さ
-    /// </summary>
-    LENGTH
 }
 
 /// <summary>

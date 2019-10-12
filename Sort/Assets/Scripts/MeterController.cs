@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,15 @@ using UnityEngine.UI;
 /// </summary>
 public class MeterController : MonoBehaviour
 {
+    /// <summary>
+    /// イベント辞書
+    /// </summary>
+    Dictionary<string, int> clickEvent = new Dictionary<string, int>() {
+        {"Play",0 },
+        {"BubbleSort",1 },
+        {"ShakerSort",2 },
+        {"ComSort",3 }
+    };
 
     /// <summary>
     /// スライダーUI（メーター）
@@ -20,9 +30,9 @@ public class MeterController : MonoBehaviour
     [SerializeField] private Text sortName;
 
     /// <summary>
-    /// 配列
+    /// 実行回数
     /// </summary>
-    [SerializeField] protected int[] Array;
+    [SerializeField] private Text Counter;
 
     /// <summary>
     /// ソートクラス
@@ -32,7 +42,10 @@ public class MeterController : MonoBehaviour
     /// <summary>
     /// 配置したボタンを格納
     /// </summary>
-    public Button[] buttons = new Button[(int)UI_BUTTON.LENGTH];
+    public Button[] buttons;
+
+    [SerializeField] private Color FromButtonColor = new Color();
+    [SerializeField] private Color ToButtonColor = new Color();
 
     /// <summary>
     /// 初期化
@@ -40,14 +53,14 @@ public class MeterController : MonoBehaviour
     private void Start()
     {
         // ボタンクリックイベントをアタッチする
-        buttons[(int)UI_BUTTON.Play].onClick.AddListener(OnClickPlay);
-        buttons[(int)UI_BUTTON.BubbleSort].onClick.AddListener(OnClickBubbleSort);
-
-        buttons = null;
+        buttons[clickEvent["Play"]].onClick.AddListener(OnClickPlay);
+        buttons[clickEvent["BubbleSort"]].onClick.AddListener(() => { SetAction(new BubbleSort(Changed, SortEnd)); });
+        buttons[clickEvent["ShakerSort"]].onClick.AddListener(() => { SetAction(new ShakerSort(Changed, SortEnd)); });
+        buttons[clickEvent["ComSort"]].onClick.AddListener(() => { SetAction(new ComSort(Changed, SortEnd)); });
     }
 
     /// <summary>
-    /// コンポーネントアタッチ時の実行処理（エディタ上のみ）
+    /// コンポーネントアタッチ時orリセット時の実行処理（エディタ上のみ）
     /// </summary>
     private void Reset()
     {
@@ -60,10 +73,33 @@ public class MeterController : MonoBehaviour
         // ソート名Textを取得
         sortName = GameObject.Find("SortName").GetComponent<Text>();
 
+        // カウンター取得
+        Counter = GameObject.Find("Counter").GetComponent<Text>();
+
         // 配置したボタンを取得
-        buttons[(int)UI_BUTTON.Play] = GameObject.Find(UI_BUTTON.Play.ToString()).GetComponent<Button>();
-        buttons[(int)UI_BUTTON.BubbleSort] = GameObject.Find(UI_BUTTON.BubbleSort.ToString()).GetComponent<Button>();
-        
+        buttons = new Button[clickEvent.Count];
+        foreach (string key in clickEvent.Keys)
+        {
+            buttons[clickEvent[key]] = GameObject.Find(key).GetComponent<Button>();
+        }
+    }
+
+    /// <summary>
+    /// インスペクタ変更時のイベント
+    /// </summary>
+    private void OnValidate()
+    {
+        float lerpNum = 1.0f / (float)(clickEvent.Count - 1);
+        foreach (string key in clickEvent.Keys)
+        {
+            GameObject.Find(key).GetComponent<Image>().color = Color.Lerp(FromButtonColor, ToButtonColor, lerpNum * (float)clickEvent[key]);
+        }
+
+        lerpNum = 1.0f / (float)(Global.Length - 1);
+        for (float i = 0; i < Global.Length; i++)
+        {
+            GameObject.Find("Meter" + (i + 1).ToString()).GetComponentInChildren<Image>().color = Color.Lerp(FromButtonColor, ToButtonColor, lerpNum * i);
+        }
     }
 
     /// <summary>
@@ -72,8 +108,18 @@ public class MeterController : MonoBehaviour
     /// <param name="data">変更箇所データ</param>
     public void Changed(ChangedData data)
     {
+        Counter.text = data.count.ToString();
         slider[data.fromIndex].value = data.fromValue;
         slider[data.toIndex].value = data.toValue;
+    }
+
+    /// <summary>
+    /// ソート終了通知
+    /// </summary>
+    public void SortEnd()
+    {
+        for (int i = 0; i < buttons.Length; i++)
+            buttons[i].interactable = true;
     }
 
     /// <summary>
@@ -83,8 +129,13 @@ public class MeterController : MonoBehaviour
     {
         if (sortController == null) return;
 
+        for (int i = 0; i < buttons.Length; i++)
+            buttons[i].interactable = false;
+
+        Counter.text = "0";
+
         // 配列の初期化
-        Array = new int[Global.Length];
+        int[] Array = new int[Global.Length];
         for (int i = 0; i < Global.Length; i++)
         {
             Array[i] = i + 1;
@@ -102,11 +153,12 @@ public class MeterController : MonoBehaviour
     }
 
     /// <summary>
-    /// バブルソート選択イベント
+    /// アクションの設定
     /// </summary>
-    public void OnClickBubbleSort()
+    /// <param name="base"></param>
+    public void SetAction(Base @base)
     {
-        sortName.text = "Bubble Sort";
-        sortController = new BubbleSort(Changed);
+        sortController = @base;
+        sortName.text = @base.Name();
     }
 }

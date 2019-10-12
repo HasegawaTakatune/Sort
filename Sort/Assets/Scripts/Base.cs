@@ -3,17 +3,17 @@
 /// <summary>
 /// ベースクラス
 /// </summary>
-public class Base
+public abstract class Base : Interface
 {
+    /// <summary>
+    /// 名前
+    /// </summary>    
+    public abstract string Name();
+
     /// <summary>
     /// 配列
     /// </summary>
     [SerializeField] protected int[] Array;
-
-    /// <summary>
-    /// 待ち時間
-    /// </summary>
-    [SerializeField] protected const int waitTime = 100;
 
     /// <summary>
     /// デリゲート宣言
@@ -27,20 +27,59 @@ public class Base
     public Delegate Changed;
 
     /// <summary>
+    /// デリゲート宣言
+    /// </summary>
+    public delegate void Delegate2();
+
+    /// <summary>
+    /// デリゲート（ソート終了通知）
+    /// </summary>
+    public Delegate2 SortEnd;
+
+    /// <summary>
     /// コンストラクタ
     /// </summary>
-    /// <param name="delegate">配列並び替え時にバインドする関数</param>
-    public Base(Delegate @delegate)
-    {
-        Changed = @delegate;
-    }
+    /// <param name="delg">配列並び替え時にバインドする関数</param>
+    /// <param name="delg2">ソート終了時にバインドする関数</param>
+    public Base(Delegate delg, Delegate2 delg2) { Changed = delg; SortEnd = delg2; }
+
+    /// <summary>
+    /// インスタンス取得
+    /// </summary>
+    /// <param name="delg">配列並び替え時にバインドする関数</param>
+    /// <param name="delg2">ソート終了時にバインドする関数</param>
+    /// <returns>インスタンス</returns>
+    public abstract Base GetInstance(Delegate delg, Delegate2 delg2);
+
+    /// <summary>
+    /// デストラクタ
+    /// </summary>
+    ~Base() { Changed = null; SortEnd = null; }
 
     /// <summary>
     /// ソート実行
     /// </summary>
     /// <param name="values">対象配列</param>
-    public virtual void Play(int[] values)
+    public void Play(int[] values)
     {
         Array = values;
+        Sort();
+    }
+
+    /// <summary>
+    /// ソート処理
+    /// </summary>
+    public abstract void Sort();
+
+    /// <summary>
+    /// 並び替え
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="to"></param>
+    protected void Swap(int from, int to)
+    {
+        int tmp = Array[from];
+        Array[from] = Array[to];
+        Array[to] = tmp;
     }
 }
