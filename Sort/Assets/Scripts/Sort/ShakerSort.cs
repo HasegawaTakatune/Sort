@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
-
+/// <summary>
+/// シェーカーソート
+/// </summary>
 public class ShakerSort : Base
 {
     /// <summary>
@@ -28,7 +30,7 @@ public class ShakerSort : Base
     /// </summary>
     public override async void Sort()
     {
-        int count = 0, next = 0;
+        int next = 0;
         bool isEnd = false;
 
         while (!isEnd)
@@ -39,13 +41,10 @@ public class ShakerSort : Base
                 next = i + 1;
                 if (Array[i] < Array[next])
                 {
-                    await Task.Delay(100);
-
-                    count++;
+                    await Task.Delay(Global.WaitTime);
                     Swap(i, next);
                     isEnd = false;
                 }
-                Changed?.Invoke(new ChangedData(i, Array[i], next, Array[next], count));
             }
 
             for (int i = Global.Length - 1; i < 0; i++)
@@ -53,13 +52,10 @@ public class ShakerSort : Base
                 next = i - 1;
                 if (Array[i] < Array[next])
                 {
-                    await Task.Delay(100);
-
-                    count++;
+                    await Task.Delay(Global.WaitTime);
                     Swap(i, next);
                     isEnd = false;
                 }
-                Changed?.Invoke(new ChangedData(i, Array[i], next, Array[next], count));
             }
         }
         SortEnd?.Invoke();

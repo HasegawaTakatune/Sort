@@ -38,4 +38,8 @@ public static class Global
     /// </summary>
     public const int Length = 20;
 
+    /// <summary>
+    /// 待ち時間
+    /// </summary>
+    public const int WaitTime = 100;
 }

@@ -15,6 +15,8 @@ public abstract class Base : Interface
     /// </summary>
     [SerializeField] protected int[] Array;
 
+    protected int count = 0;
+
     /// <summary>
     /// デリゲート宣言
     /// </summary>
@@ -62,6 +64,7 @@ public abstract class Base : Interface
     /// <param name="values">対象配列</param>
     public void Play(int[] values)
     {
+        count = 0;
         Array = values;
         Sort();
     }
@@ -77,9 +80,11 @@ public abstract class Base : Interface
     /// <param name="from"></param>
     /// <param name="to"></param>
     protected void Swap(int from, int to)
-    {
+    {        
         int tmp = Array[from];
         Array[from] = Array[to];
         Array[to] = tmp;
+        count++;
+        Changed?.Invoke(new ChangedData(from, Array[from], to, Array[to], count));
     }
 }

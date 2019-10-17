@@ -1,11 +1,9 @@
 ﻿using System.Threading.Tasks;
-
 /// <summary>
 /// コムソート
 /// </summary>
-public class ComSort : Base
+public class CombSort : Base
 {
-
     /// <summary>
     /// 名前
     /// </summary>
@@ -17,7 +15,7 @@ public class ComSort : Base
     /// </summary>
     /// <param name="delg"></param>
     /// <param name="delg2"></param>
-    public ComSort(Delegate delg, Delegate2 delg2) : base(delg, delg2) { }
+    public CombSort(Delegate delg, Delegate2 delg2) : base(delg, delg2) { }
 
     /// <summary>
     /// インスタンス取得
@@ -25,14 +23,14 @@ public class ComSort : Base
     /// <param name="delg"></param>
     /// <param name="delg2"></param>
     /// <returns></returns>
-    public override Base GetInstance(Delegate delg, Delegate2 delg2) { return new ComSort(delg, delg2); }
+    public override Base GetInstance(Delegate delg, Delegate2 delg2) { return new CombSort(delg, delg2); }
 
     /// <summary>
     /// ソート
     /// </summary>
     public override async void Sort()
     {
-        int count = 0, next = 0, interval = (int)(Global.Length / 1.3f);
+        int next = 0, interval = (int)(Global.Length / 1.3f);
         bool isEnd = false;
 
         while (!isEnd)
@@ -43,13 +41,10 @@ public class ComSort : Base
                 next = i + interval;
                 if (Array[i] < Array[next])
                 {
-                    await Task.Delay(100);
-
-                    count++;
+                    await Task.Delay(Global.WaitTime);
                     Swap(i, next);
                     isEnd = false;
                 }
-                Changed?.Invoke(new ChangedData(i, Array[i], next, Array[next], count));
             }
             interval = (int)(interval / 1.3f);
             interval = interval <= 0 ? 1 : interval;

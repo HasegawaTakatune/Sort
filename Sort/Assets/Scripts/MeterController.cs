@@ -16,7 +16,12 @@ public class MeterController : MonoBehaviour
         {"Play",0 },
         {"BubbleSort",1 },
         {"ShakerSort",2 },
-        {"ComSort",3 }
+        {"CombSort",3 },
+        {"GnomeSort",4 },
+        {"SelectionSort",5 },
+        {"InsertionSort",6 },
+        {"ShellSort",7 },
+        {"QuickSort",8 }
     };
 
     /// <summary>
@@ -56,7 +61,12 @@ public class MeterController : MonoBehaviour
         buttons[clickEvent["Play"]].onClick.AddListener(OnClickPlay);
         buttons[clickEvent["BubbleSort"]].onClick.AddListener(() => { SetAction(new BubbleSort(Changed, SortEnd)); });
         buttons[clickEvent["ShakerSort"]].onClick.AddListener(() => { SetAction(new ShakerSort(Changed, SortEnd)); });
-        buttons[clickEvent["ComSort"]].onClick.AddListener(() => { SetAction(new ComSort(Changed, SortEnd)); });
+        buttons[clickEvent["CombSort"]].onClick.AddListener(() => { SetAction(new CombSort(Changed, SortEnd)); });
+        buttons[clickEvent["GnomeSort"]].onClick.AddListener(() => { SetAction(new GnomeSort(Changed, SortEnd)); });
+        buttons[clickEvent["SelectionSort"]].onClick.AddListener(() => { SetAction(new SelectionSort(Changed, SortEnd)); });
+        buttons[clickEvent["InsertionSort"]].onClick.AddListener(() => { SetAction(new InsertionSort(Changed, SortEnd)); });
+        buttons[clickEvent["ShellSort"]].onClick.AddListener(() => { SetAction(new ShellSort(Changed, SortEnd)); });
+        buttons[clickEvent["QuickSort"]].onClick.AddListener(() => { SetAction(new QuickSort(Changed, SortEnd)); });
     }
 
     /// <summary>
@@ -80,7 +90,9 @@ public class MeterController : MonoBehaviour
         buttons = new Button[clickEvent.Count];
         foreach (string key in clickEvent.Keys)
         {
-            buttons[clickEvent[key]] = GameObject.Find(key).GetComponent<Button>();
+            GameObject obj = GameObject.Find(key);
+            buttons[clickEvent[key]] = obj.GetComponent<Button>();
+            obj.GetComponentInChildren<Text>().text = key;
         }
     }
 
@@ -89,12 +101,33 @@ public class MeterController : MonoBehaviour
     /// </summary>
     private void OnValidate()
     {
+        // メーターを取得
+        for (int i = 0; i < Global.Length; i++)
+        {
+            slider[i] = GameObject.Find("Meter" + (i + 1).ToString()).GetComponent<Slider>();
+        }
+
+        // ソート名Textを取得
+        sortName = GameObject.Find("SortName").GetComponent<Text>();
+
+        // カウンター取得
+        Counter = GameObject.Find("Counter").GetComponent<Text>();
+
+        // 配置したボタンを取得
+        buttons = new Button[clickEvent.Count];
+        foreach (string key in clickEvent.Keys)
+        {
+            GameObject obj = GameObject.Find(key);
+            buttons[clickEvent[key]] = obj.GetComponent<Button>();
+            obj.GetComponentInChildren<Text>().text = key;
+        }
+
+        // グラデーション設定
         float lerpNum = 1.0f / (float)(clickEvent.Count - 1);
         foreach (string key in clickEvent.Keys)
         {
             GameObject.Find(key).GetComponent<Image>().color = Color.Lerp(FromButtonColor, ToButtonColor, lerpNum * (float)clickEvent[key]);
         }
-
         lerpNum = 1.0f / (float)(Global.Length - 1);
         for (float i = 0; i < Global.Length; i++)
         {
@@ -106,7 +139,7 @@ public class MeterController : MonoBehaviour
     /// 配列の並び替え時に呼ばれるイベント
     /// </summary>
     /// <param name="data">変更箇所データ</param>
-    public void Changed(ChangedData data)
+    public  void Changed(ChangedData data)
     {
         Counter.text = data.count.ToString();
         slider[data.fromIndex].value = data.fromValue;
