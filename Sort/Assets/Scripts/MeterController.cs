@@ -21,7 +21,10 @@ public class MeterController : MonoBehaviour
         {"SelectionSort",5 },
         {"InsertionSort",6 },
         {"ShellSort",7 },
-        {"QuickSort",8 }
+        {"QuickSort",8 },
+        {"BucketSort",9 },
+        {"RadixSort",10 },
+        {"MergeSort",11 }
     };
 
     /// <summary>
@@ -67,6 +70,11 @@ public class MeterController : MonoBehaviour
         buttons[clickEvent["InsertionSort"]].onClick.AddListener(() => { SetAction(new InsertionSort(Changed, SortEnd)); });
         buttons[clickEvent["ShellSort"]].onClick.AddListener(() => { SetAction(new ShellSort(Changed, SortEnd)); });
         buttons[clickEvent["QuickSort"]].onClick.AddListener(() => { SetAction(new QuickSort(Changed, SortEnd)); });
+        buttons[clickEvent["BucketSort"]].onClick.AddListener(() => { SetAction(new BucketSort(ChangedOnce, SortEnd)); });
+        buttons[clickEvent["RadixSort"]].onClick.AddListener(() => { SetAction(new RadixSort(ChangedOnce, SortEnd)); });
+        buttons[clickEvent["MergeSort"]].onClick.AddListener(() => { SetAction(new MergeSort(ChangedOnce, SortEnd)); });
+
+        Screen.SetResolution(800, 600, false, 90);
     }
 
     /// <summary>
@@ -139,11 +147,21 @@ public class MeterController : MonoBehaviour
     /// 配列の並び替え時に呼ばれるイベント
     /// </summary>
     /// <param name="data">変更箇所データ</param>
-    public  void Changed(ChangedData data)
+    public void Changed(ChangedData data)
     {
         Counter.text = data.count.ToString();
         slider[data.fromIndex].value = data.fromValue;
         slider[data.toIndex].value = data.toValue;
+    }
+
+    /// <summary>
+    /// 配列の並び替えに呼ばれるイベント（単体）
+    /// </summary>
+    /// <param name="data"></param>
+    public void ChangedOnce(ChangedData data)
+    {
+        Counter.text = data.count.ToString();
+        slider[data.fromIndex].value = data.fromValue;
     }
 
     /// <summary>
@@ -171,7 +189,7 @@ public class MeterController : MonoBehaviour
         int[] Array = new int[Global.Length];
         for (int i = 0; i < Global.Length; i++)
         {
-            Array[i] = i + 1;
+            Array[i] = i;
         }
 
         // 配列をシャッフルする

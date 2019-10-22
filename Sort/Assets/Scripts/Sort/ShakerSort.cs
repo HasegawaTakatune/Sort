@@ -13,9 +13,9 @@ public class ShakerSort : Base
     /// <summary>
     /// コンストラクタ
     /// </summary>
-    /// <param name="delegate"></param>
-    /// <param name="delegate2"></param>
-    public ShakerSort(Delegate @delegate, Delegate2 @delegate2) : base(@delegate, @delegate2) { }
+    /// <param name="delg"></param>
+    /// <param name="delg2"></param>
+    public ShakerSort(Delegate delg, Delegate2 delg2) : base(delg, delg2) { }
 
     /// <summary>
     /// インスタンス取得

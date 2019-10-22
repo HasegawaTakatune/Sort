@@ -80,11 +80,23 @@ public abstract class Base : Interface
     /// <param name="from"></param>
     /// <param name="to"></param>
     protected void Swap(int from, int to)
-    {        
+    {
         int tmp = Array[from];
         Array[from] = Array[to];
         Array[to] = tmp;
         count++;
         Changed?.Invoke(new ChangedData(from, Array[from], to, Array[to], count));
+    }
+
+    /// <summary>
+    /// 変更
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="value"></param>
+    protected void Change(int index, int value)
+    {
+        Array[index] = value;
+        count++;
+        Changed?.Invoke(new ChangedData(index, value, 0, 0, count));
     }
 }
