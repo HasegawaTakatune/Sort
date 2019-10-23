@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+
 /// <summary>
 /// 基数ソート
 /// </summary>
@@ -39,7 +40,7 @@ public class RadixSort : Base
             tmp[i].Add(Array[i]);
         }
 
-        Sort(tmp, 10);
+        await Sort(tmp, 10);
 
         SortEnd?.Invoke();
     }
@@ -49,7 +50,7 @@ public class RadixSort : Base
     /// </summary>
     /// <param name="ary"></param>
     /// <param name="digit"></param>
-    public async void Sort(List<int>[] ary, int digit)
+    public async Task Sort(List<int>[] ary, int digit)
     {
         int index = 0;
         List<int>[] tmp = new List<int>[Global.Length];
@@ -77,6 +78,6 @@ public class RadixSort : Base
 
         if (digit <= 1) return;
 
-        Sort(tmp, digit / 10);
+        await Sort(tmp, digit / 10);
     }
 }

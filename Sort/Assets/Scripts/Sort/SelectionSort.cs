@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+
 /// <summary>
 /// 選択ソート
 /// </summary>

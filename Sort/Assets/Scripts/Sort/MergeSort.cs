@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+
 /// <summary>
 /// マージソート
 /// </summary>
@@ -44,7 +45,7 @@ public class MergeSort : Base
     /// <param name="left"></param>
     /// <param name="right"></param>
     /// <returns></returns>
-    async Task Sort(int[] array, int[] temp, int left, int right)
+    public async Task Sort(int[] array, int[] temp, int left, int right)
     {
         int mid;
 
@@ -68,9 +69,9 @@ public class MergeSort : Base
     /// <param name="mid"></param>
     /// <param name="right"></param>
     /// <returns></returns>
-    async Task Merge(int[] array, int[] temp, int left, int mid, int right)
+    private async Task Merge(int[] array, int[] temp, int left, int mid, int right)
     {
-        int  left_end, num_elements, tmp_pos;
+        int left_end, num_elements, tmp_pos;
 
         left_end = mid - 1;
         tmp_pos = left;

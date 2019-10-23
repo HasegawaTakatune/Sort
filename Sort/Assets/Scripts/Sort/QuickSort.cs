@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+
 /// <summary>
 /// クイックソート
 /// </summary>
@@ -28,9 +29,9 @@ public class QuickSort : Base
     /// <summary>
     /// ソート
     /// </summary>
-    public override void Sort()
+    public async override void Sort()
     {
-        Sort(Array, 0, Array.Length - 1);
+        await Sort(Array, 0, Array.Length - 1);
         SortEnd?.Invoke();
     }
 
@@ -41,7 +42,7 @@ public class QuickSort : Base
     /// <param name="from"></param>
     /// <param name="to"></param>
     /// <returns></returns>
-    int Pivot(int[] array, int from, int to)
+    private int Pivot(int[] array, int from, int to)
     {
         int index = from + 1;
         while (index <= to && array[from] == array[index]) index++;
@@ -58,7 +59,7 @@ public class QuickSort : Base
     /// <param name="to"></param>
     /// <param name="pivot"></param>
     /// <returns></returns>
-    int Partition(int[] array, int from, int to, int pivot)
+    private async Task<int> Partition(int[] array, int from, int to, int pivot)
     {
         int left = from, right = to;
 
@@ -72,6 +73,7 @@ public class QuickSort : Base
             while (right >= from && array[right] >= pivot) right--;
 
             if (left > right) break;
+            await Task.Delay(Global.WaitTime);
             Swap(left, right);
             left++; right--;
         }
@@ -84,16 +86,15 @@ public class QuickSort : Base
     /// <param name="array"></param>
     /// <param name="from"></param>
     /// <param name="to"></param>
-    public async void Sort(int[] array, int from, int to)
+    public async Task Sort(int[] array, int from, int to)
     {
         if (from == to) return;
         int pivot = Pivot(array, from, to);
         if (pivot != -1)
         {
-            await Task.Delay(Global.WaitTime);
-            int index = Partition(array, from, to, array[pivot]);
-            Sort(array, from, index - 1);
-            Sort(array, index, to);
+            int index = await Partition(array, from, to, array[pivot]);
+            await Sort(array, from, index - 1);
+            await Sort(array, index, to);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+
 /// <summary>
 /// コムソート
 /// </summary>
