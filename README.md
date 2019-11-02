@@ -21,8 +21,8 @@
 - 3点からなるベジェ曲線表示  
   
 ## 参照
-[ソートの種類](https://qiita.com/r-ngtm/items/f4fa55c77459f63a5228)  
-[ベジェ曲線の実装](https://setchi.hatenablog.com/entry/2017/04/08/191455)  
+[【Unity】ソートアルゴリズム12種を可視化してみた](https://qiita.com/r-ngtm/items/f4fa55c77459f63a5228)  
+[【Unity】ベジェ曲線を学び、実装する](https://setchi.hatenablog.com/entry/2017/04/08/191455)  
   
 ## 環境  
 - Unity 2019.2.7f2  
